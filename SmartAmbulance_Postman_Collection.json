@@ -1,0 +1,574 @@
+{
+	"info": {
+		"_postman_id": "b6efaa99-1a4f-42e1-8842-smartambulance-backend",
+		"name": "AI Smart Ambulance Dispatch System",
+		"description": "Complete REST API collection for AI-Based Smart Ambulance Dispatch and Emergency Response System.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "emergencyId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "tripId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "driverId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "ambulanceId",
+			"value": "1",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Priya Sharma\",\n  \"email\": \"priya@example.com\",\n  \"password\": \"password123\",\n  \"phone\": \"+91-9876543299\",\n  \"role\": \"USER\",\n  \"address\": \"Madhapur, Hyderabad\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login (Patient / User)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if(jsonData.data && jsonData.data.token) {",
+									"    pm.collectionVariables.set('token', jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"patient@ambulance.com\",\n  \"password\": \"patient123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Login (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if(jsonData.data && jsonData.data.token) {",
+									"    pm.collectionVariables.set('token', jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@ambulance.com\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Login (Driver)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if(jsonData.data && jsonData.data.token) {",
+									"    pm.collectionVariables.set('token', jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"driver1@ambulance.com\",\n  \"password\": \"driver123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Users",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["users", "profile"]
+						}
+					}
+				},
+				{
+					"name": "Get All Users (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": ["{{baseUrl}}"],
+							"path": ["users"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Emergencies",
+			"item": [
+				{
+					"name": "Create Emergency (AI Priority & Dispatch)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if(jsonData.data && jsonData.data.id) {",
+									"    pm.collectionVariables.set('emergencyId', jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"emergencyType\": \"CARDIAC_ARREST\",\n  \"description\": \"Patient experiencing severe chest pain and breathlessness\",\n  \"severity\": \"CRITICAL\",\n  \"latitude\": 17.4325,\n  \"longitude\": 78.4071,\n  \"patientAge\": 58,\n  \"isUnconscious\": true,\n  \"hasSevereBleeding\": false,\n  \"hasBreathingDifficulty\": true,\n  \"isMajorAccident\": false,\n  \"isChestPain\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/emergencies",
+							"host": ["{{baseUrl}}"],
+							"path": ["emergencies"]
+						}
+					}
+				},
+				{
+					"name": "Get Emergency By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/emergencies/{{emergencyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["emergencies", "{{emergencyId}}"]
+						}
+					}
+				},
+				{
+					"name": "Get My Emergencies",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/emergencies/my",
+							"host": ["{{baseUrl}}"],
+							"path": ["emergencies", "my"]
+						}
+					}
+				},
+				{
+					"name": "Update Emergency Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"EN_ROUTE\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/emergencies/{{emergencyId}}/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["emergencies", "{{emergencyId}}", "status"]
+						}
+					}
+				},
+				{
+					"name": "Cancel Emergency",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/emergencies/{{emergencyId}}/cancel",
+							"host": ["{{baseUrl}}"],
+							"path": ["emergencies", "{{emergencyId}}", "cancel"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Driver & Trips",
+			"item": [
+				{
+					"name": "Get Driver Emergencies",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/drivers/{{driverId}}/emergencies",
+							"host": ["{{baseUrl}}"],
+							"path": ["drivers", "{{driverId}}", "emergencies"]
+						}
+					}
+				},
+				{
+					"name": "Update Driver & Ambulance Location",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"latitude\": 17.4350,\n  \"longitude\": 78.4100\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/drivers/{{driverId}}/location",
+							"host": ["{{baseUrl}}"],
+							"path": ["drivers", "{{driverId}}", "location"]
+						}
+					}
+				},
+				{
+					"name": "Start Trip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if(jsonData.data && jsonData.data.id) {",
+									"    pm.collectionVariables.set('tripId', jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/trips/start/{{emergencyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["trips", "start", "{{emergencyId}}"]
+						}
+					}
+				},
+				{
+					"name": "Update Trip Status (ARRIVED)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"ARRIVED\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/trips/{{tripId}}/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["trips", "{{tripId}}", "status"]
+						}
+					}
+				},
+				{
+					"name": "Update Trip Status (PATIENT_PICKED)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"PATIENT_PICKED\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/trips/{{tripId}}/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["trips", "{{tripId}}", "status"]
+						}
+					}
+				},
+				{
+					"name": "Update Trip Status (AT_HOSPITAL)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"AT_HOSPITAL\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/trips/{{tripId}}/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["trips", "{{tripId}}", "status"]
+						}
+					}
+				},
+				{
+					"name": "Complete Trip",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/trips/{{tripId}}/complete",
+							"host": ["{{baseUrl}}"],
+							"path": ["trips", "{{tripId}}", "complete"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Ambulances & Hospitals",
+			"item": [
+				{
+					"name": "Get All Ambulances",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ambulances",
+							"host": ["{{baseUrl}}"],
+							"path": ["ambulances"]
+						}
+					}
+				},
+				{
+					"name": "Get Available Ambulances",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ambulances/available",
+							"host": ["{{baseUrl}}"],
+							"path": ["ambulances", "available"]
+						}
+					}
+				},
+				{
+					"name": "Get Ambulance Location",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ambulances/{{ambulanceId}}/location",
+							"host": ["{{baseUrl}}"],
+							"path": ["ambulances", "{{ambulanceId}}", "location"]
+						}
+					}
+				},
+				{
+					"name": "Get All Hospitals",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/hospitals",
+							"host": ["{{baseUrl}}"],
+							"path": ["hospitals"]
+						}
+					}
+				},
+				{
+					"name": "Get Available Hospitals",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/hospitals/available",
+							"host": ["{{baseUrl}}"],
+							"path": ["hospitals", "available"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Admin & Analytics",
+			"item": [
+				{
+					"name": "Admin Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/dashboard",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "dashboard"]
+						}
+					}
+				},
+				{
+					"name": "Admin Statistics (Recharts ready)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/admin/statistics",
+							"host": ["{{baseUrl}}"],
+							"path": ["admin", "statistics"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "7. AI Demand Prediction",
+			"item": [
+				{
+					"name": "Forecast Ambulance Demand",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/predictions/demand?area=Banjara Hills",
+							"host": ["{{baseUrl}}"],
+							"path": ["predictions", "demand"],
+							"query": [
+								{ "key": "area", "value": "Banjara Hills" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Predictions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{baseUrl}}/predictions",
+							"host": ["{{baseUrl}}"],
+							"path": ["predictions"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
