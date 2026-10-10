@@ -36,7 +36,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (userRepository.count() > 0) {
+        if (userRepository.count() > 0 && userRepository.findByEmail("admin@smartambulance.com").isPresent()) {
             log.info("Database already initialized. Skipping seed data.");
             return;
         }

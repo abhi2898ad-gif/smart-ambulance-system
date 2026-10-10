@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -22,20 +21,20 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/register")
+    @GetMapping({"/", "/api", "/api/auth/health", "/health"})
+    public ResponseEntity<ApiResponse<String>> healthCheck() {
+        return ResponseEntity.ok(ApiResponse.success("Smart Ambulance Emergency System is operational", "UP"));
+    }
+
+    @PostMapping({"/register", "/api/auth/register", "/api/users/register"})
     public ResponseEntity<ApiResponse<UserResponse>> register(@Valid @RequestBody RegisterRequest request) {
         ApiResponse<UserResponse> response = authService.register(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
+    @PostMapping({"/login", "/api/auth/login"})
     public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
         ApiResponse<LoginResponse> response = authService.login(request);
         return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/health")
-    public ResponseEntity<ApiResponse<String>> healthCheck() {
-        return ResponseEntity.ok(ApiResponse.success("Smart Ambulance Emergency System is operational", "UP"));
     }
 }
