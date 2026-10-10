@@ -3,6 +3,10 @@
 > **Faster Response. Smarter Care.**  
 > A production-ready, full-stack emergency healthcare dispatch platform combining a **Java Spring Boot 3 REST API**, an intelligent **AI Triage & Geospatial Routing Engine**, and a **React 18 + Vite** emergency command console.
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fabhi2898ad-gif%2Fsmart-ambulance-system)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/abhi2898ad-gif/smart-ambulance-system)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-abhi2898ad--gif%2Fsmart--ambulance--system-blue?logo=github)](https://github.com/abhi2898ad-gif/smart-ambulance-system)
+
 ---
 
 ## 🌟 Highlights
